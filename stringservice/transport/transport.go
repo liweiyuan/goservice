@@ -9,6 +9,8 @@ import (
 	"goservice/stringservice/service"
 )
 
+//RPC 接口
+//endpoint 会封装为一个RPC的接口，方便远程调用
 func MakeUppercaseEndpoint(svc service.StringService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(uppercaseRequest)
