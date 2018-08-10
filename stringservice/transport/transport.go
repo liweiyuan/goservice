@@ -13,25 +13,25 @@ import (
 //endpoint 会封装为一个RPC的接口，方便远程调用
 func MakeUppercaseEndpoint(svc service.StringService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(uppercaseRequest)
+		req := request.(UppercaseRequest)
 		v, err := svc.Uppercase(req.S)
 		if err != nil {
-			return uppercaseResponse{v, err.Error()}, nil
+			return UppercaseResponse{v, err.Error()}, nil
 		}
-		return uppercaseResponse{v, ""}, nil
+		return UppercaseResponse{v, ""}, nil
 	}
 }
 
 func MakeCountEndpoint(svc service.StringService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(countRequest)
+		req := request.(CountRequest)
 		v := svc.Count(req.S)
-		return countResponse{v}, nil
+		return CountResponse{v}, nil
 	}
 }
 
 func DecodeUppercaseRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var request uppercaseRequest
+	var request UppercaseRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func DecodeUppercaseRequest(_ context.Context, r *http.Request) (interface{}, er
 }
 
 func DecodeCountRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var request countRequest
+	var request CountRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		return nil, err
 	}
@@ -50,19 +50,19 @@ func EncodeResponse(_ context.Context, w http.ResponseWriter, response interface
 	return json.NewEncoder(w).Encode(response)
 }
 
-type uppercaseRequest struct {
+type UppercaseRequest struct {
 	S string `json:"s"`
 }
 
-type uppercaseResponse struct {
+type UppercaseResponse struct {
 	V   string `json:"v"`
 	Err string `json:"err,omitempty"`
 }
 
-type countRequest struct {
+type CountRequest struct {
 	S string `json:"s"`
 }
 
-type countResponse struct {
+type CountResponse struct {
 	V int `json:"v"`
 }
