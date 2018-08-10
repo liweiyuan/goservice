@@ -26,3 +26,6 @@ func (StringServiceI) Count(s string) int {
 
 // ErrEmpty is returned when an input string is empty.
 var ErrEmpty = errors.New("empty string")
+
+//ServiceMiddleware is chainable behavior modifier for StringService
+//type ServiceMiddleware func(StringService) StringService
